@@ -1,22 +1,13 @@
-# run_analysis.R
-
-# You should create one R script called run_analysis.R that does the following. 
+################################################################################
+#  You should create one R script called run_analysis.R that does the following. 
 # - Merges the training and the test sets to create one data set.
-# - Extracts only the measurements on the mean and standard deviation for each measurement. 
+# - Extracts only the measurements on the mean and standard deviation for each 
+#   measurement. 
 # - Uses descriptive activity names to name the activities in the data set
 # - Appropriately labels the data set with descriptive variable names. 
 # - From the data set in step 4, creates a second, independent tidy data set 
 #   with the average of each variable for each activity and each subject.
-
-
-# The data from the link has been split up into two segments:
-#  - a training set, and a
-#  - a test set
-# This split was done for the purposes of training and testing machine learning 
-# algorithms as a means of avoiding the problem of "overfitting". However, for 
-# our purposes, we simply want to summarise the whole data. As such want all of 
-# that data together. 
-
+################################################################################
 library(dplyr)
 library(reshape2)
 
@@ -24,6 +15,14 @@ library(reshape2)
 ################################################################################
 #                      Import the training and test sets as one single dataframe
 ################################################################################
+# The data from the Samsung Galaxy S accelerometer dataset has been split up 
+# into two segments:
+#  - a training set, and a
+#  - a test set
+# This split was done for the purposes of training and testing machine learning 
+# algorithms as a means of avoiding the problem of "overfitting". However, for 
+# our purposes, we simply want to summarise the whole data. As we such want all 
+# of that data together. 
 df <- rbind(read.table("data/test/X_test.txt",   colClasses="numeric"), 
             read.table("data/train/X_train.txt", colClasses="numeric"))
 
@@ -70,6 +69,7 @@ levels(df$activity) = read.table("data//activity_labels.txt",
 # standard deviation for each measurement (and the Activity Label) 
 df <- df[,grepl("(-mean\\(\\)|-std\\(\\))", col_names_from_file)]
 
+
 ################################################################################
 #                          AVERAGE OF EACH VARIABLE PER ACTIVITY AND PARTICIPANT
 ################################################################################
@@ -85,7 +85,9 @@ names(final.tidy) <- c("participant.id", "activity", "tBodyAcc.mean.X", "tBodyAc
 # ncol(final.tidy)   # 68  columns
 # nrow(final.tidy)   # 180 rows
 
+
 ################################################################################
 #                                                                  WRITE TO FILE
 ################################################################################
 write.table(final.tidy, file="data/outputdata.txt", row.names=FALSE) 
+
